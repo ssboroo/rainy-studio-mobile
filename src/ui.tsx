@@ -16,7 +16,7 @@ export function Button({title,onPress,secondary=false,disabled=false,color,style
 }) {
   return <Pressable accessibilityRole="button" accessibilityLabel={title} disabled={disabled}
     onPress={onPress} style={({pressed})=>[secondary?S.secondary:S.action,
-      {opacity:disabled?.5:pressed?.75:1},color?{backgroundColor:color}:{},style]}>
+      {opacity:disabled ? 0.5 : pressed ? 0.75 : 1},color?{backgroundColor:color}:{},style]}>
     <Text style={secondary?S.secondaryText:S.actionText}>{title}</Text>
   </Pressable>;
 }
