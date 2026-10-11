@@ -5,12 +5,12 @@
     "scheme": "rainystudio",
     "version": "0.1.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "dark",
+    "userInterfaceStyle": "light",
     "platforms": [
       "ios",
       "android"
     ],
-    "backgroundColor": "#080A0E",
+    "backgroundColor": "#F7F8FA",
     "ios": {
       "bundleIdentifier": "studio.rainy.mobile",
       "supportsTablet": true,
@@ -22,7 +22,7 @@
       "package": "studio.rainy.mobile",
       "edgeToEdgeEnabled": true,
       "adaptiveIcon": {
-        "backgroundColor": "#080A0E"
+        "backgroundColor": "#FFFFFF"
       }
     },
     "extra": {
