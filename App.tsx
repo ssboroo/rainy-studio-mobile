@@ -172,7 +172,7 @@ export default function App() {
           <Gap n={5}/><Text style={{fontSize:11.2,lineHeight:16,color:"#84765E"}}>AI кино, зураг, product ads</Text>
           <Gap n={16}/><View style={{flexDirection:"row",justifyContent:"space-between"}}>
             <Text style={{fontSize:10.5,fontWeight:"900",color:"#9D741B"}}>НЭЭХ</Text>
-            <Ionicons name="arrow-up-forward" color="#9D741B" size={17}/>
+            <Ionicons name="arrow-forward" color="#9D741B" size={17}/>
           </View>
         </Pressable>
         <Pressable accessibilityRole="button" onPress={()=>setTab("voice")}
@@ -183,7 +183,7 @@ export default function App() {
           <Gap n={5}/><Text style={{fontSize:11.2,lineHeight:16,color:"#658779"}}>Монгол хоолой, эмоц, дубляж</Text>
           <Gap n={16}/><View style={{flexDirection:"row",justifyContent:"space-between"}}>
             <Text style={{fontSize:10.5,fontWeight:"900",color:"#189A79"}}>НЭЭХ</Text>
-            <Ionicons name="arrow-up-forward" color="#189A79" size={17}/>
+            <Ionicons name="arrow-forward" color="#189A79" size={17}/>
           </View>
         </Pressable>
       </View>
@@ -364,7 +364,7 @@ export default function App() {
         style={{backgroundColor:"#FFF3DE",borderWidth:1,borderColor:"#F8EBD2",borderRadius:23,padding:20,marginBottom:12}}>
         <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
           <IconTile name="images-outline" bg=C.white color="#A67B26"/>
-          <Ionicons name="arrow-up-forward" size={21} color="#A67B26"/>
+          <Ionicons name="arrow-forward" size={21} color="#A67B26"/>
         </View><Gap n={17}/>
         <Text style={{fontSize:20,fontWeight:"900",color:C.heading}}>Video Projects</Text>
         <Gap n={6}/><Copy>Видео, зураг, үүсгэлтийн түүх</Copy>
@@ -374,7 +374,7 @@ export default function App() {
         style={{backgroundColor:"#E6F7EF",borderWidth:1,borderColor:"#D7EEDF",borderRadius:23,padding:20}}>
         <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
           <IconTile name="musical-notes-outline" bg=C.white color="#169A76"/>
-          <Ionicons name="arrow-up-forward" size={21} color="#169A76"/>
+          <Ionicons name="arrow-forward" size={21} color="#169A76"/>
         </View><Gap n={17}/>
         <Text style={{fontSize:20,fontWeight:"900",color:C.heading}}>Voice Library</Text>
         <Gap n={6}/><Copy>TTS, дуу, подкаст, дубляжийн түүх</Copy>
