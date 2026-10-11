@@ -363,7 +363,7 @@ export default function App() {
       <Pressable accessibilityRole="button" onPress={()=>openStudio("video",studioUrl("video","/studio"),"Видео бүтээлийн түүх")}
         style={{backgroundColor:"#FFF3DE",borderWidth:1,borderColor:"#F8EBD2",borderRadius:23,padding:20,marginBottom:12}}>
         <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-          <IconTile name="images-outline" bg=C.white color="#A67B26"/>
+          <IconTile name="images-outline" bg={C.white} color="#A67B26"/>
           <Ionicons name="arrow-forward" size={21} color="#A67B26"/>
         </View><Gap n={17}/>
         <Text style={{fontSize:20,fontWeight:"900",color:C.heading}}>Video Projects</Text>
@@ -373,7 +373,7 @@ export default function App() {
       <Pressable accessibilityRole="button" onPress={()=>openStudio("voice",studioUrl("voice","/"),"Дууны түүх")}
         style={{backgroundColor:"#E6F7EF",borderWidth:1,borderColor:"#D7EEDF",borderRadius:23,padding:20}}>
         <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-          <IconTile name="musical-notes-outline" bg=C.white color="#169A76"/>
+          <IconTile name="musical-notes-outline" bg={C.white} color="#169A76"/>
           <Ionicons name="arrow-forward" size={21} color="#169A76"/>
         </View><Gap n={17}/>
         <Text style={{fontSize:20,fontWeight:"900",color:C.heading}}>Voice Library</Text>
@@ -424,7 +424,7 @@ export default function App() {
       <SectionTitle label="AUTOMATION" title="AI туслахтай холбох"/>
       <Card>
         <View style={{flexDirection:"row",gap:12,alignItems:"center"}}>
-          <IconTile name="git-network-outline" bg=C.softViolet color={C.primary}/>
+          <IconTile name="git-network-outline" bg={C.softViolet} color={C.primary}/>
           <View style={{flex:1}}>
             <Text style={{fontSize:14,fontWeight:"800",color:C.heading}}>ChatGPT + Claude MCP</Text>
             <Gap n={4}/><Copy muted>AI туслахтай хоёр тусдаа OAuth холболт</Copy>
