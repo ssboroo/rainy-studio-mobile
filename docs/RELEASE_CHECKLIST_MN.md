@@ -45,3 +45,9 @@ npx expo start -c
 - Mobile: https://github.com/ssboroo/rainy-studio-mobile
 - Video: https://github.com/ssboroo/rainyaivideostudio
 - Voice: https://github.com/ssboroo/rainy_tts
+
+## White UI 2026-10-11
+
+- Device appearance locked to light (iOS/Android), background #F7F8FA.
+- Check readability on 320px wide Android screen and iPhone SE including keyboard and long Mongolian labels.
+- Verify home hero / Video model / Voice emotion / Projects / Account + WebView navigation and icon font loading on real devices.
