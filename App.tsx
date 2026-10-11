@@ -294,29 +294,62 @@ export default function App() {
   }
   function Voice(){
     return <>
-      <Eyebrow>RAINY · AI VOICE STUDIO</Eyebrow>
-      <Text style={S.h1}>Монгол дуу <Text style={{color:C.green}}>амьтай</Text> сонсогдоно.</Text>
-      <Gap n={10}/><Copy>ElevenLabs-ийн Монгол хэлний TTS, олон хоолой, эмоц, подкаст, STT болон дубляжийн боломж.</Copy>
-      <Gap n={22}/><Eyebrow>ХООЛОЙ СОНГОХ</Eyebrow>
+      <MiniPill title="02  ·  VOICE STUDIO" color="#158D73" bg="#E1F7ED"/>
+      <Gap n={13}/>
+      <Text style={[S.h1,{fontSize:34}]}>Үг бүрд{"\n"}<Text style={{color:"#1C9C7D"}}>мэдрэмж нэм.</Text></Text>
+      <Gap n={10}/><Copy>Монгол AI хоолой, сэтгэл хөдлөл, подкаст, дубляж — шинэ түвшний аудио бүтээл.</Copy>
+      <Gap n={20}/>
+      <View style={{padding:17,borderRadius:21,backgroundColor:"#E5F8EF",borderColor:"#D5EFDF",borderWidth:1,
+        flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>
+        <View style={{flex:1}}>
+          <Text style={{fontSize:10,color:"#168D70",fontWeight:"900",letterSpacing:1}}>VOICE CREATOR</Text>
+          <Gap n={9}/><Text style={{fontSize:19,color:C.heading,fontWeight:"900",letterSpacing:-.5}}>Монгол дууны{"\n"}шинэ өнгө.</Text>
+          <Gap n={8}/><Copy muted>Eleven v4 · Emotion · TTS</Copy>
+        </View>
+        <View style={{height:69,flexDirection:"row",alignItems:"center",gap:4}}>
+          {[21,35,52,29,61,39,24,47].map((h,i)=><View key={i} style={{width:4,height:h,borderRadius:7,backgroundColor:i%2===0?"#1CB48E":"#70DDBE"}}/>)}
+        </View>
+      </View>
+      <Gap n={25}/>
+      <SectionTitle title="Хоолойгоо сонгох"/>
       {voicesLoading?<ActivityIndicator color={C.green}/>:null}
-      {voiceError?<Card><Text style={{color:C.danger}}>{voiceError}</Text><Gap n={12}/><Button title="Дахин ачаалах" secondary onPress={()=>void loadVoices()}/></Card>:null}
+      {voiceError?<Card><Text style={{color:C.danger}}>{voiceError}</Text><Gap n={11}/><Button title="Дахин ачаалах" secondary onPress={()=>void loadVoices()}/></Card>:null}
       <View style={{flexDirection:"row",flexWrap:"wrap"}}>
-        {voiceOptions.slice(0,24).map(v=><Chip key={v.id} label={v.name} active={voiceName===v.name} onPress={()=>setVoiceName(v.name)}/>)}
+        {(showAllVoices?voiceOptions.slice(0,24):voiceOptions.slice(0,6)).map(v=>{
+          const active=voiceName===v.name;
+          return <Pressable key={v.id} accessibilityRole="button" accessibilityState={{selected:active}}
+            onPress={()=>setVoiceName(v.name)} style={{flexDirection:"row",alignItems:"center",gap:6,
+              backgroundColor:active?"#E9F8F0":C.white,borderWidth:1,borderColor:active?"#46C7A0":C.outline,
+              borderRadius:13,paddingHorizontal:13,paddingVertical:11,marginRight:8,marginBottom:8}}>
+            <Ionicons name="mic-circle-outline" size={18} color={active?"#129D79":C.muted}/>
+            <Text style={{color:active?"#168E72":C.heading,fontWeight:"800",fontSize:12}}>{v.name}</Text>
+          </Pressable>;
+        })}
       </View>
-      {voiceOptions.length===0&&!voicesLoading&&!voiceError?<Copy muted>Серверийн хоолойн жагсаалтыг шалгаж байна.</Copy>:null}
-      <Gap n={12}/><Eyebrow>СЭТГЭЛ ХӨДЛӨЛ</Eyebrow>
+      {voiceOptions.length===0&&!voicesLoading&&!voiceError?<Copy muted>Хоолойн жагсаалтыг шалгаж байна.</Copy>:null}
+      {voiceOptions.length>6?<Pressable accessibilityRole="button" onPress={()=>setShowAllVoices(x=>!x)}
+          style={{paddingVertical:10,alignSelf:"flex-start"}}>
+        <Text style={{color:"#198F76",fontSize:11.5,fontWeight:"800"}}>{showAllVoices?"Цөөлөх ↑":"Бусад "+(voiceOptions.length-6)+" хоолой үзэх ↓"}</Text>
+      </Pressable>:null}
+      <Gap n={17}/>
+      <SectionTitle title="Сэтгэл хөдлөл"/>
       <View style={{flexDirection:"row",flexWrap:"wrap"}}>
-        {emotions.map(e=><Chip key={e.value} label={e.label} active={emotion===e.value} onPress={()=>setEmotion(e.value)}/>)}
+        {emotions.map(e=><Pressable key={e.value} accessibilityRole="button" accessibilityState={{selected:emotion===e.value}}
+          onPress={()=>setEmotion(e.value)} style={[S.chip,emotion===e.value?{backgroundColor:"#E9F8F0",borderColor:"#49BD99"}:{}]}>
+          <Text style={[S.chipText,emotion===e.value?{color:"#168D70"}:{}]}>{e.label}</Text>
+        </Pressable>)}
       </View>
-      <Gap n={14}/><Eyebrow>УНШУУЛАХ ТЕКСТ</Eyebrow>
+      <Gap n={20}/>
+      <SectionTitle title="Уншуулах текст"/>
       <TextInput accessibilityLabel="Монгол хоолойн текст" value={voiceScript} onChangeText={v=>{setVoiceScript(v);setCopied(false);}}
-        placeholder="Энд Монгол текстээ бич..." placeholderTextColor={C.muted} multiline maxLength={12000}
-        style={[S.input,{minHeight:145}]}/>
-      <Gap n={10}/><Copy muted>Voice Studio-д Eleven v4 загвар сонговол эмоцын tag дэмжигдэнэ. Бодит дууны чанар, дуудлага нь загвар болон эх текстээс хамаарна.</Copy>
-      <Gap n={17}/><Button title="Текст хуулаад Voice Studio нээх ↗" color={C.green} onPress={()=>void openVoiceWithScript()}/>
-      <Gap n={11}/><Button title={copied?"Текст хуулагдсан ✓":"Зөвхөн текст хуулах"} secondary
+        placeholder="Монгол хэлээр уншуулах текстээ бич..." placeholderTextColor={C.subtle} multiline maxLength={12000}
+        style={[S.input,{minHeight:142}]}/>
+      <Gap n={10}/><Copy muted>{voiceScript.length} тэмдэгт · {voiceName||"Хоолой сонгоогүй"} · {emotions.find(e=>e.value===emotion)?.label}</Copy>
+      <Gap n={15}/>
+      <Button title="Voice Studio-д үргэлжлүүлэх" onPress={()=>void openVoiceWithScript()}/>
+      <Gap n={9}/><Button title={copied?"Текст хуулагдсан ✓":"Зөвхөн текст хуулах"} secondary
         onPress={()=>void Clipboard.setStringAsync((emotion==="neutral"?"":"["+emotion+"] ")+voiceScript).then(()=>setCopied(true))}/>
-      <Gap n={12}/><Copy muted>Сонгосон дууны нэр: {voiceName||"Хоолой сонгоогүй"}. Веб студид нээхдээ дууны нэр, эмоцоо дахин сонгоно. Хоёр талын данс/кредит тусдаа хэвээр.</Copy>
+      <Gap n={11}/><Copy muted>Текстийг хуулж веб студид нээнэ. Хоолой, эмоцоо веб дээр баталгаажуулна. Eleven v4-ийн эмоцын дэмжлэг загвараас хамаарна.</Copy>
     </>;
   }
 
