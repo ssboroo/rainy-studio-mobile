@@ -37,7 +37,7 @@ function MiniPill({title,color=C.primary,bg=C.softViolet}:{title:string;color?:s
 }
 function SectionTitle({label,title}:{label?:string;title:string}){
  return <View style={{marginBottom:12}}>{label?<Text style={[S.eyebrow,{marginBottom:5}]}>{label}</Text>:null}
- <Text style={{fontSize:19,fontWeight:"850",color:C.heading,letterSpacing:-.4}}>{title}</Text></View>;
+ <Text style={{fontSize:19,fontWeight:"800",color:C.heading,letterSpacing:-.4}}>{title}</Text></View>;
 }
 
 const starters=[
@@ -72,6 +72,8 @@ export default function App() {
   const [copied,setCopied]=useState(false);
   const [filter,setFilter]=useState<"all"|"video"|"image"|"workflow">("all");
   const [search,setSearch]=useState("");
+  const [showAllModels,setShowAllModels]=useState(false);
+  const [showAllVoices,setShowAllVoices]=useState(false);
   const [refreshing,setRefreshing]=useState(false);
 
   const loadHealth=useCallback(async()=>{
@@ -219,41 +221,66 @@ export default function App() {
 
   function Video(){
     return <>
-      <Eyebrow>RAVS · AI VIDEO STUDIO</Eyebrow>
-      <Text style={S.h1}>Санаагаа <Text style={{color:C.yellow}}>хөдөлгөөн</Text> болго.</Text>
-      <Gap n={10}/><Copy>Монгол prompt бичээд тохирох модель сонго. Эцсийн үнэ, кредит, үүсгэлтийг RAVS веб студи дээр баталгаажуулна.</Copy>
-      <Gap n={22}/>
-      <Eyebrow>ЮУ БҮТЭЭХ ВЭ?</Eyebrow>
-      <View style={{flexDirection:"row",flexWrap:"wrap"}}>
-        {[["all","Бүгд"],["video","Видео"],["image","Зураг"],["workflow","Workflow"]].map(([key,label])=>
-          <Chip key={key} label={label} active={filter===key} onPress={()=>setFilter(key as typeof filter)}/>)}
+      <MiniPill title="01  ·  VIDEO STUDIO" color="#A67918" bg="#FFF1CD"/>
+      <Gap n={13}/>
+      <Text style={[S.h1,{fontSize:34}]}>Санаагаа{"\n"}<Text style={{color:"#BD8926"}}>хөдөлгөөн</Text> болго.</Text>
+      <Gap n={10}/><Copy>Монгол prompt-оос видео, зураг, cinematic бүтээл. Үнэ болон үүсгэлтийг RAVS сервер баталгаажуулна.</Copy>
+      <Gap n={20}/>
+      <View style={{padding:15,backgroundColor:"#FFF8E9",borderRadius:19,borderWidth:1,borderColor:"#F7ECD3",flexDirection:"row",alignItems:"center",gap:12}}>
+        <IconTile name="film-outline" bg="#FFE6B4" color="#A67918"/>
+        <View style={{flex:1}}><Text style={{fontSize:13,color:C.heading,fontWeight:"800"}}>AI Video Creator</Text>
+          <Gap n={4}/><Copy muted>Video · Image · Cinema · Motion</Copy></View>
+        <Ionicons name="sparkles-outline" color="#A67B26" size={20}/>
       </View>
-      <Gap n={8}/>
-      <TextInput placeholder="Модель хайх..." placeholderTextColor={C.muted} value={search} onChangeText={setSearch} style={S.input}/>
-      <Gap n={12}/>
-      {modelsLoading?<ActivityIndicator color={C.yellow}/>:null}
+      <Gap n={24}/>
+      <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+        <SectionTitle title="Модель сонгох"/>
+        <Text style={[S.caption,{fontWeight:"700"}]}>{videoModels.length} загвар</Text>
+      </View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{paddingBottom:4}}>
+        {([["all","Бүгд"],["video","Видео"],["image","Зураг"],["workflow","Workflow"]] as const).map(([key,label])=>
+          <Chip key={key} label={label} active={filter===key} onPress={()=>{setFilter(key);setShowAllModels(false);}}/>)}
+      </ScrollView>
+      <Gap n={5}/>
+      <View style={{flexDirection:"row",alignItems:"center",backgroundColor:C.white,borderWidth:1,borderColor:C.outline,borderRadius:15,
+          paddingHorizontal:13,marginBottom:14}}>
+        <Ionicons name="search-outline" color={C.subtle} size={19}/>
+        <TextInput placeholder="Модель хайх..." placeholderTextColor={C.subtle} value={search} onChangeText={setSearch}
+          style={{flex:1,paddingVertical:13,paddingLeft:10,fontSize:13.5,color:C.text}}/>
+      </View>
+      {modelsLoading?<ActivityIndicator color={C.primary}/>:null}
       {modelError?<Card><Text style={{color:C.danger}}>{modelError}</Text><Gap n={12}/><Button title="Дахин ачаалах" secondary onPress={()=>void loadModels()}/></Card>:null}
       {visibleModels.length===0&&!modelsLoading&&!modelError?<Copy muted>Сонгосон шүүлтүүрт тохирох модель алга.</Copy>:null}
-      {visibleModels.map(m=><Pressable onPress={()=>setSelectedModel(m.slug)} key={m.slug}
-        style={[S.card,{marginBottom:9,padding:15,borderColor:selectedModel===m.slug?C.yellow:C.outline}]}>
-        <View style={{flexDirection:"row",alignItems:"center",gap:10}}>
-          <View style={{height:34,width:34,borderRadius:12,backgroundColor:m.kind==="image"?"#273825":"#393117",alignItems:"center",justifyContent:"center"}}>
-            <Text style={{color:m.kind==="image"?C.green:C.yellow,fontSize:20}}>{m.kind==="image"?"▣":"▷"}</Text>
+      {(showAllModels?visibleModels:visibleModels.slice(0,5)).map((m,index)=>{
+        const active=selectedModel===m.slug;
+        return <Pressable accessibilityRole="button" accessibilityState={{selected:active}} onPress={()=>setSelectedModel(m.slug)} key={m.slug}
+          style={{backgroundColor:active?"#F8F7FF":C.white,borderWidth:active?1.5:1,
+            borderColor:active?C.primary:C.outline,borderRadius:17,padding:13,marginBottom:9,flexDirection:"row",alignItems:"center",gap:12}}>
+          <IconTile name={m.kind==="image"?"image-outline":m.kind==="workflow"?"layers-outline":"videocam-outline"}
+            bg={index%2===0?"#FFF1D7":C.softViolet}
+            color={index%2===0?"#B4811E":C.primary}/>
+          <View style={{flex:1}}>
+            <Text numberOfLines={1} style={{fontWeight:"800",color:C.heading,fontSize:13.5}}>{m.name}</Text>
+            <Gap n={4}/><Text numberOfLines={1} style={S.caption}>{m.maker||m.provider||m.kind}</Text>
+            <Gap n={3}/><Text style={{color:m.apiVerified?"#179B75":C.muted,fontSize:10,fontWeight:"700"}}>
+              {m.apiVerified?"API каталогт идэвхтэй":"Сайт дээр боломжийг шалгана"}</Text>
           </View>
-          <View style={{flex:1}}><Text style={{color:C.text,fontWeight:"800",fontSize:15}} numberOfLines={1}>{m.name}</Text>
-            <Text style={S.caption}>{m.maker||m.provider||m.kind} · {m.apiVerified?"API үнэ дэмжигдсэн":"Сайт дээр боломжийг шалгах"}</Text></View>
-          {selectedModel===m.slug?<Text style={{color:C.yellow,fontWeight:"900",fontSize:21}}>✓</Text>:null}
-        </View>
-      </Pressable>)}
-      <Gap n={17}/>
-      <Eyebrow>САНААГАА БИЧ</Eyebrow>
+          <Ionicons name={active?"checkmark-circle":"ellipse-outline"} size={22} color={active?C.primary:"#CBD1DD"}/>
+        </Pressable>;
+      })}
+      {visibleModels.length>5?<Pressable accessibilityRole="button" onPress={()=>setShowAllModels(v=>!v)}
+        style={{alignItems:"center",padding:11}}>
+        <Text style={{color:C.primary,fontWeight:"800",fontSize:12}}>{showAllModels?"Цөөлөх ↑":"Бусад "+(visibleModels.length-5)+" загварыг үзэх ↓"}</Text>
+      </Pressable>:null}
+      <Gap n={19}/>
+      <SectionTitle title="Санаагаа бичих"/>
       <TextInput accessibilityLabel="Видео prompt" multiline value={videoPrompt} onChangeText={setVideoPrompt}
-        maxLength={2400} placeholder="Жишээ: Монгол тал нутгийн нар мандах кино кадр..."
-        placeholderTextColor={C.muted} style={[S.input,{minHeight:122}]}/>
-      <Gap n={10}/><Copy muted>{videoPrompt.length}/2400 тэмдэгт · Модель: {model?.name||"сонгоогүй"}</Copy>
-      <Gap n={16}/><Button title="Видео студид үргэлжлүүлэх ↗"
-        onPress={()=>openStudio("video",composeVideoUrl(selectedModel,videoPrompt),"RAINY Video Studio")}/>
-      <Gap n={12}/><Copy muted>Хэрэглэгч RAVS дансаар нэвтэрч, видео/зургийн төлбөртэй үүсгэлтийг өөрөө баталгаажуулна.</Copy>
+        maxLength={2400} placeholder="Жишээ: Монгол тал нутагт нар мандах кино кадр..."
+        placeholderTextColor={C.subtle} style={[S.input,{minHeight:125}]}/>
+      <Gap n={10}/><Copy muted>{videoPrompt.length}/2400 тэмдэгт · {model?.name||"Модель сонгоогүй"}</Copy>
+      <Gap n={16}/>
+      <Button title="Video Studio-д үргэлжлүүлэх" onPress={()=>openStudio("video",composeVideoUrl(selectedModel,videoPrompt),"RAINY Video Studio")}/>
+      <Gap n={12}/><Copy muted>Төлбөртэй видео үүсгэхээс өмнө хэрэглэгч сонгосон тохиргоо болон кредитээ батална.</Copy>
     </>;
   }
 
