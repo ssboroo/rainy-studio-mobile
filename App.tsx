@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  ActivityIndicator, BackHandler, KeyboardAvoidingView, Linking, Platform,
+  ActivityIndicator, BackHandler, Linking, Platform,
   Pressable, RefreshControl, SafeAreaView, ScrollView, StatusBar as NativeStatusBar,
   Text, TextInput, View
 } from "react-native";
@@ -119,7 +119,7 @@ export default function App() {
       <View style={{padding:24,borderRadius:28,backgroundColor:"#191E26",borderColor:"#333B45",borderWidth:1,overflow:"hidden"}}>
         <View style={{position:"absolute",width:220,height:220,borderWidth:45,borderColor:"#313624",borderRadius:130,right:-90,top:-110}}/>
         <View style={{position:"absolute",width:165,height:165,borderWidth:28,borderColor:"#3D3918",borderRadius:99,right:-55,top:30}}/>
-        <Eyebrow>MONOGOLIAN AI CREATIVE PLATFORM</Eyebrow>
+        <Eyebrow>MONGOLIAN AI CREATIVE PLATFORM</Eyebrow>
         <Text style={{fontSize:35,lineHeight:41,fontWeight:"900",color:C.text,maxWidth:290}}>Санаанаас{"\n"}<Text style={{color:C.yellow}}>бэлэн бүтээл</Text> хүртэл.</Text>
         <Gap n={12}/>
         <Text style={[S.body,{maxWidth:310}]}>Видео, зураг, сэтгэл хөдлөлтэй Монгол дуу хоолой. Нэг RAINY экосистем.</Text>
@@ -292,7 +292,7 @@ export default function App() {
       <Header/>
       <ScrollView key={tab} style={{flex:1}} keyboardShouldPersistTaps="handled"
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={C.yellow} onRefresh={()=>void refreshAll()}/>}>
-        <View style={S.container}>{React.createElement(show)}</View>
+        <View style={S.container}>{show()}</View>
       </ScrollView>
       <View style={{flexDirection:"row",backgroundColor:"#11151B",borderTopColor:C.outline,borderTopWidth:1,paddingBottom:Platform.OS==="ios"?10:4,paddingTop:9}}>
         {NAV.map(item=><Pressable key={item.key} onPress={()=>setTab(item.key)} accessibilityRole="tab"
