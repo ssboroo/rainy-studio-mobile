@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "RAINY Studio",
+    "slug": "rainy-studio-mobile",
+    "scheme": "rainystudio",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "backgroundColor": "#080A0E",
+    "ios": {
+      "bundleIdentifier": "studio.rainy.mobile",
+      "supportsTablet": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "studio.rainy.mobile",
+      "edgeToEdgeEnabled": true,
+      "adaptiveIcon": {
+        "backgroundColor": "#080A0E"
+      }
+    },
+    "extra": {
+      "appStage": "internal-mvp"
+    },
+    "newArchEnabled": true
+  }
+}
