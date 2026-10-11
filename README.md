@@ -6,7 +6,7 @@
 
 ## What the initial app does
 
-- Native React Native/Expo dark-themed home, search, workflow templates and product navigation.
+- Native React Native/Expo premium **white/light-themed** home, search, workflow templates and product navigation.
 - Fetches public model catalog from `https://video.rainy.studio/api/models` and available voices from `https://voice.rainy.studio/api/voices`, with safe offline/error states.
 - Compose Mongolian video prompts, choose a model, and open the existing authenticated RAVS production workflow **with the prompt/model**.
 - Compose Mongolian voice scripts, pick a voice and emotion direction, **copy script** and enter the existing authenticated Voice Studio workflow.
@@ -52,3 +52,9 @@ npx expo-doctor
 Production checklist is in `docs/RELEASE_CHECKLIST_MN.md`.
 
 © 2026 RAINY Studio. Independent product; third-party API integrations do not represent official partnership.
+
+## Design update — 2026-10-11
+
+- White/ivory premium UI with ink typography, soft lavender primary CTA, warm-yellow Video and mint-green Voice studio cards.
+- All five tabs use matching light screens, native Ionicons, clear section hierarchy, readable Mongolian typography, smaller catalog defaults with expand controls.
+- Expo iOS/Android window status bar and native bottom navigation use the light palette. Both existing backend workflows remain unchanged.
