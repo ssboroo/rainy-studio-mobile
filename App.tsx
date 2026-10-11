@@ -287,7 +287,7 @@ export default function App() {
   const show=tab==="home"?Home:tab==="video"?Video:tab==="voice"?Voice:tab==="projects"?Projects:Profile;
 
   return <SafeAreaView style={[S.page,{paddingTop:Platform.OS==="android"?(NativeStatusBar.currentHeight||0):0}]}>
-    <StatusBar style="light" backgroundColor={C.bg}/>
+    <StatusBar style="light"/>
     {browser?<BrowserPane browser={browser} onClose={()=>setBrowser(null)}/>:<>
       <Header/>
       <ScrollView key={tab} style={{flex:1}} keyboardShouldPersistTaps="handled"
