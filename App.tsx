@@ -5,6 +5,7 @@ import {
   Text, TextInput, View
 } from "react-native";
 import { WebView } from "react-native-webview";
+import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import { StatusBar } from "expo-status-bar";
 import { checkConnections, getVideoModels, getVoiceOptions, type VideoModel, type VoiceOption } from "./src/api";
@@ -16,11 +17,29 @@ type Tab = "home"|"video"|"voice"|"projects"|"profile";
 type Studio = "video"|"voice";
 type Browser = { studio:Studio; url:string; title:string }|null;
 type Conn = {video:boolean|null;voice:boolean|null};
-const NAV: {key:Tab;symbol:string;title:string}[] = [
-  {key:"home",symbol:"⌂",title:"Нүүр"},{key:"video",symbol:"▷",title:"Видео"},
-  {key:"voice",symbol:"♫",title:"Хоолой"},{key:"projects",symbol:"▦",title:"Төслүүд"},
-  {key:"profile",symbol:"◎",title:"Профайл"}
+type IconName = React.ComponentProps<typeof Ionicons>["name"];
+const NAV: {key:Tab;icon:IconName;active:IconName;title:string}[] = [
+  {key:"home",icon:"home-outline",active:"home",title:"Нүүр"},
+  {key:"video",icon:"videocam-outline",active:"videocam",title:"Видео"},
+  {key:"voice",icon:"mic-outline",active:"mic",title:"Хоолой"},
+  {key:"projects",icon:"folder-open-outline",active:"folder-open",title:"Төслүүд"},
+  {key:"profile",icon:"person-outline",active:"person",title:"Профайл"}
 ];
+function IconTile({name,bg,color}:{name:IconName;bg:string;color:string}){
+ return <View style={{width:46,height:46,borderRadius:16,backgroundColor:bg,justifyContent:"center",alignItems:"center"}}>
+  <Ionicons name={name} color={color} size={24}/>
+ </View>;
+}
+function MiniPill({title,color=C.primary,bg=C.softViolet}:{title:string;color?:string;bg?:string}){
+ return <View style={{alignSelf:"flex-start",backgroundColor:bg,borderRadius:20,paddingVertical:7,paddingHorizontal:11}}>
+  <Text style={{fontSize:10,color,fontWeight:"800",letterSpacing:.35}}>{title}</Text>
+ </View>;
+}
+function SectionTitle({label,title}:{label?:string;title:string}){
+ return <View style={{marginBottom:12}}>{label?<Text style={[S.eyebrow,{marginBottom:5}]}>{label}</Text>:null}
+ <Text style={{fontSize:19,fontWeight:"850",color:C.heading,letterSpacing:-.4}}>{title}</Text></View>;
+}
+
 const starters=[
   {label:"Бүтээгдэхүүний реклам",text:"Монгол бүтээгдэхүүнийг премиум кино реклам шиг харуул. Бодит гэрэлтүүлэг, зөөлөн хөдөлгөөн, 9:16 формат.",tag:"SOCIAL ADS"},
   {label:"Монгол киноны кадр",text:"Монгол тал нутагт нар мандах үе. Киноны өргөн план, салхинд найгах өвс, байгалийн зөөлөн хөдөлгөөн.",tag:"CINEMA"},
@@ -102,62 +121,98 @@ export default function App() {
   }).slice(0,35),[videoModels,filter,search]);
   const model=videoModels.find(x=>x.slug===selectedModel);
 
-  const Header=()=> <View style={{paddingHorizontal:20,paddingTop:6,paddingBottom:14,flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>
+  const Header=()=> <View style={{paddingHorizontal:21,paddingTop:7,paddingBottom:15,
+      flexDirection:"row",alignItems:"center",justifyContent:"space-between",backgroundColor:C.bg}}>
     <View style={{flexDirection:"row",alignItems:"center",gap:9}}>
-      <View style={{width:30,height:30,borderRadius:12,backgroundColor:C.yellow,alignItems:"center",justifyContent:"center"}}>
-        <Text style={{fontSize:18,fontWeight:"900",color:C.bg}}>R</Text>
+      <View style={{width:35,height:35,borderRadius:12,backgroundColor:C.ink,alignItems:"center",justifyContent:"center"}}>
+        <Text style={{color:"#FFFFFF",fontSize:20,fontWeight:"900"}}>R<Text style={{color:"#C8BEFF"}}>.</Text></Text>
       </View>
-      <Text style={{fontSize:18,color:C.text,fontWeight:"900",letterSpacing:1}}>RAINY<Text style={{color:C.yellow}}> STUDIO</Text></Text>
+      <Text style={{fontSize:19,color:C.heading,fontWeight:"900",letterSpacing:-.9}}>rainy<Text style={{color:C.primary}}>.studio</Text></Text>
     </View>
-    <View style={{backgroundColor:C.panel2,paddingHorizontal:10,paddingVertical:7,borderRadius:10,borderWidth:1,borderColor:C.outline}}>
-      <Text style={{color:C.muted,fontSize:10,fontWeight:"800",letterSpacing:1}}>MOBILE BETA</Text>
-    </View>
+    <Pressable onPress={()=>setTab("profile")} accessibilityRole="button" accessibilityLabel="Миний профайл"
+      style={{width:38,height:38,borderRadius:15,alignItems:"center",justifyContent:"center",backgroundColor:C.white,borderWidth:1,borderColor:C.outline}}>
+      <Ionicons name="person-outline" color={C.heading} size={19}/>
+    </Pressable>
   </View>;
 
   function Home(){
     return <>
-      <View style={{padding:24,borderRadius:28,backgroundColor:"#191E26",borderColor:"#333B45",borderWidth:1,overflow:"hidden"}}>
-        <View style={{position:"absolute",width:220,height:220,borderWidth:45,borderColor:"#313624",borderRadius:130,right:-90,top:-110}}/>
-        <View style={{position:"absolute",width:165,height:165,borderWidth:28,borderColor:"#3D3918",borderRadius:99,right:-55,top:30}}/>
-        <Eyebrow>MONGOLIAN AI CREATIVE PLATFORM</Eyebrow>
-        <Text style={{fontSize:35,lineHeight:41,fontWeight:"900",color:C.text,maxWidth:290}}>Санаанаас{"\n"}<Text style={{color:C.yellow}}>бэлэн бүтээл</Text> хүртэл.</Text>
-        <Gap n={12}/>
-        <Text style={[S.body,{maxWidth:310}]}>Видео, зураг, сэтгэл хөдлөлтэй Монгол дуу хоолой. Нэг RAINY экосистем.</Text>
-        <Gap n={20}/>
-        <Button title="Видео бүтээж эхлэх ↗" onPress={()=>setTab("video")}/>
-      </View>
-      <Gap n={20}/>
-      <TwoColumn>
-        <View style={{flex:1}}><Card style={{backgroundColor:"#222011",minHeight:134,borderColor:"#534B1E"}}>
-          <Text style={{color:C.yellow,fontSize:26}}>▷</Text><Gap n={8}/>
-          <Text style={{color:C.text,fontWeight:"800",fontSize:18}}>Video</Text>
-          <Copy muted>AI кино, зураг, зар сурталчилгаа</Copy>
-          <Gap n={14}/><Button title="Нээх" secondary onPress={()=>setTab("video")}/>
-        </Card></View>
-        <View style={{flex:1}}><Card style={{backgroundColor:"#1C281B",minHeight:134,borderColor:"#304B2B"}}>
-          <Text style={{color:C.green,fontSize:26}}>♫</Text><Gap n={8}/>
-          <Text style={{color:C.text,fontWeight:"800",fontSize:18}}>Voice</Text>
-          <Copy muted>Монгол хоолой, эмоц, дубляж</Copy>
-          <Gap n={14}/><Button title="Нээх" secondary onPress={()=>setTab("voice")}/>
-        </Card></View>
-      </TwoColumn>
-      <Gap n={25}/>
-      <Eyebrow>ШУУД БҮТЭЭХ САНААНУУД</Eyebrow>
-      {starters.map(x=><Pressable key={x.label} onPress={()=>{setVideoPrompt(x.text);setTab("video");}}
-        style={[S.card,{marginBottom:10,flexDirection:"row",alignItems:"center",gap:12}]}>
-        <View style={{width:45,height:45,borderRadius:14,backgroundColor:"#363119",alignItems:"center",justifyContent:"center"}}>
-          <Text style={{color:C.yellow,fontSize:22}}>✦</Text>
+      <View style={{backgroundColor:"#EFECFF",borderColor:"#E8E3FF",borderWidth:1,borderRadius:28,padding:22,overflow:"hidden",minHeight:272}}>
+        <View style={{position:"absolute",right:-60,top:-60,width:185,height:185,borderRadius:110,borderWidth:30,borderColor:"#E3DEFF"}}/>
+        <View style={{position:"absolute",right:-49,bottom:-63,width:164,height:164,borderRadius:100,borderWidth:25,borderColor:"#E3DEFF"}}/>
+        <MiniPill title="MONGOLIAN AI CREATIVE" color="#6357EB" bg="#E1DBFF"/>
+        <Gap n={16}/>
+        <Text style={{fontSize:36,lineHeight:42,fontWeight:"900",letterSpacing:-1.5,color:C.heading}}>
+          Санаагаа{"\n"}<Text style={{color:C.primary}}>бүтээл</Text> болго.
+        </Text>
+        <Gap n={11}/>
+        <Text style={{fontSize:13,lineHeight:20,color:"#6D6988",maxWidth:240}}>Видео, зураг, сэтгэл хөдлөлтэй Монгол хоолой. Бүгд нэг дор.</Text>
+        <Gap n={18}/>
+        <Pressable accessibilityRole="button" onPress={()=>setTab("video")}
+          style={{alignSelf:"flex-start",paddingHorizontal:17,paddingVertical:13,backgroundColor:C.primary,borderRadius:13,flexDirection:"row",alignItems:"center",gap:10}}>
+          <Text style={{color:"#FFFFFF",fontWeight:"800",fontSize:12.5}}>Бүтээж эхлэх</Text>
+          <Ionicons name="arrow-forward" color="#FFFFFF" size={16}/>
+        </Pressable>
+        <View style={{position:"absolute",bottom:32,right:16,width:64,height:64,borderRadius:21,
+          backgroundColor:"#FFFFFF",alignItems:"center",justifyContent:"center",
+          shadowColor:"#5642C7",shadowOpacity:.16,shadowRadius:17,shadowOffset:{width:0,height:7}}}>
+          <Ionicons name="sparkles" size={29} color={C.primary}/>
         </View>
-        <View style={{flex:1}}><Text style={{color:C.muted,fontSize:10,fontWeight:"800",letterSpacing:1}}>{x.tag}</Text>
-          <Gap n={4}/><Text style={{color:C.text,fontWeight:"800",fontSize:15}}>{x.label}</Text></View>
-        <Text style={{color:C.yellow,fontSize:20}}>›</Text>
+      </View>
+      <Gap n={25}/>
+      <SectionTitle label="ТАНЫ БҮТЭЭЛЧ ОРОН ЗАЙ" title="Юу бүтээх вэ?"/>
+      <View style={{flexDirection:"row",gap:12}}>
+        <Pressable accessibilityRole="button" onPress={()=>setTab("video")}
+          style={{flex:1,backgroundColor:"#FFF2D8",borderRadius:22,padding:15,minHeight:189}}>
+          <IconTile name="videocam-outline" bg="#FFFFFF" color="#A97913"/>
+          <Gap n={18}/>
+          <Text style={{fontSize:19,fontWeight:"900",color:C.heading}}>Video <Text style={{color:"#B38B34"}}>AI</Text></Text>
+          <Gap n={5}/><Text style={{fontSize:11.2,lineHeight:16,color:"#84765E"}}>AI кино, зураг, product ads</Text>
+          <Gap n={16}/><View style={{flexDirection:"row",justifyContent:"space-between"}}>
+            <Text style={{fontSize:10.5,fontWeight:"900",color:"#9D741B"}}>НЭЭХ</Text>
+            <Ionicons name="arrow-up-forward" color="#9D741B" size={17}/>
+          </View>
+        </Pressable>
+        <Pressable accessibilityRole="button" onPress={()=>setTab("voice")}
+          style={{flex:1,backgroundColor:"#E3F7ED",borderRadius:22,padding:15,minHeight:189}}>
+          <IconTile name="mic-outline" bg="#FFFFFF" color="#179E79"/>
+          <Gap n={18}/>
+          <Text style={{fontSize:19,fontWeight:"900",color:C.heading}}>Voice <Text style={{color:"#199E7B"}}>AI</Text></Text>
+          <Gap n={5}/><Text style={{fontSize:11.2,lineHeight:16,color:"#658779"}}>Монгол хоолой, эмоц, дубляж</Text>
+          <Gap n={16}/><View style={{flexDirection:"row",justifyContent:"space-between"}}>
+            <Text style={{fontSize:10.5,fontWeight:"900",color:"#189A79"}}>НЭЭХ</Text>
+            <Ionicons name="arrow-up-forward" color="#189A79" size={17}/>
+          </View>
+        </Pressable>
+      </View>
+      <Gap n={27}/>
+      <SectionTitle label="ХУРДАН ЭХЛЭХ" title="Түгээмэл бүтээлүүд"/>
+      {starters.map((item,index)=><Pressable key={item.label}
+        accessibilityRole="button" onPress={()=>{setVideoPrompt(item.text);setTab("video");}}
+        style={{backgroundColor:C.white,borderRadius:18,borderWidth:1,borderColor:C.outline,
+        flexDirection:"row",alignItems:"center",gap:13,padding:13,marginBottom:9}}>
+        <IconTile name={index===0?"bag-handle-outline":index===1?"film-outline":"sparkles-outline"}
+          bg={index===0?"#FFF2D9":index===1?C.softViolet:C.softMint}
+          color={index===0?"#A67B27":index===1?C.primary:"#199E7C"}/>
+        <View style={{flex:1}}>
+          <Text style={{color:C.subtle,fontSize:10,fontWeight:"800"}}>{item.tag}  ·  0{index+1}</Text>
+          <Gap n={3}/><Text style={{color:C.heading,fontSize:13.5,fontWeight:"800"}}>{item.label}</Text>
+        </View><Ionicons name="chevron-forward" size={16} color={C.subtle}/>
       </Pressable>)}
-      <Gap n={18}/>
-      <Card><Eyebrow>СЕРВЕРИЙН ХОЛБОЛТ</Eyebrow>
-        <ServiceIndicator label="Video Studio" ready={health.video}/>
-        <Gap n={10}/><ServiceIndicator label="Voice Studio" ready={health.voice}/>
-        <Gap n={12}/><Copy muted>Холболт онлайн байх нь генерац болон төлбөрийн үйлчилгээ амжилттай гэсэн баталгаа биш.</Copy>
-        <Gap n={14}/><Button title={loadingHealth?"Шалгаж байна…":"Холболт шинэчлэх"} secondary disabled={loadingHealth} onPress={()=>void loadHealth()}/>
+      <Gap n={16}/>
+      <Card>
+        <View style={{flexDirection:"row",alignItems:"center",gap:8,marginBottom:13}}>
+          <Ionicons name="cloud-outline" size={19} color={C.primary}/>
+          <Text style={{fontWeight:"800",fontSize:13,color:C.heading}}>Студийн холболт</Text>
+        </View>
+        <View style={{flexDirection:"row",gap:13,flexWrap:"wrap"}}>
+          <ServiceIndicator label="Video" ready={health.video}/>
+          <ServiceIndicator label="Voice" ready={health.voice}/>
+        </View>
+        <Gap n={10}/><Copy muted>Онлайн төлөв нь AI generation болон төлбөрийн баталгаа биш.</Copy>
+        <Gap n={11}/><Pressable onPress={()=>void loadHealth()} accessibilityRole="button">
+          <Text style={{fontSize:11,color:C.primary,fontWeight:"800"}}>{loadingHealth?"Шалгаж байна…":"Холболт шинэчлэх ↻"}</Text>
+        </Pressable>
       </Card>
     </>;
   }
@@ -287,20 +342,26 @@ export default function App() {
   const show=tab==="home"?Home:tab==="video"?Video:tab==="voice"?Voice:tab==="projects"?Projects:Profile;
 
   return <SafeAreaView style={[S.page,{paddingTop:Platform.OS==="android"?(NativeStatusBar.currentHeight||0):0}]}>
-    <StatusBar style="light"/>
+    <StatusBar style="dark"/>
     {browser?<BrowserPane browser={browser} onClose={()=>setBrowser(null)}/>:<>
       <Header/>
       <ScrollView key={tab} style={{flex:1}} keyboardShouldPersistTaps="handled"
         refreshControl={<RefreshControl refreshing={refreshing} tintColor={C.yellow} onRefresh={()=>void refreshAll()}/>}>
         <View style={S.container}>{show()}</View>
       </ScrollView>
-      <View style={{flexDirection:"row",backgroundColor:"#11151B",borderTopColor:C.outline,borderTopWidth:1,paddingBottom:Platform.OS==="ios"?10:4,paddingTop:9}}>
-        {NAV.map(item=><Pressable key={item.key} onPress={()=>setTab(item.key)} accessibilityRole="tab"
-            accessibilityState={{selected:tab===item.key}}
-            style={{flex:1,alignItems:"center",justifyContent:"center",paddingVertical:5}}>
-          <Text style={{color:tab===item.key?C.yellow:C.muted,fontSize:23,fontWeight:"600"}}>{item.symbol}</Text>
-          <Text style={{color:tab===item.key?C.yellow:C.muted,fontSize:10,fontWeight:tab===item.key?"800":"600"}}>{item.title}</Text>
-        </Pressable>)}
+      <View style={{flexDirection:"row",backgroundColor:C.white,borderTopColor:C.outline,
+        borderTopWidth:1,paddingBottom:Platform.OS==="ios"?12:5,paddingTop:9,paddingHorizontal:5}}>
+        {NAV.map(item=>{
+          const active=tab===item.key;
+          return <Pressable key={item.key} accessibilityRole="tab" accessibilityState={{selected:active}}
+            onPress={()=>setTab(item.key)} style={{flex:1,alignItems:"center",gap:4,paddingVertical:4}}>
+            <View style={{width:45,height:29,borderRadius:12,alignItems:"center",justifyContent:"center",
+              backgroundColor:active?"#ECEAFF":"transparent"}}>
+              <Ionicons name={active?item.active:item.icon} size={21} color={active?C.primary:C.subtle}/>
+            </View>
+            <Text style={{fontSize:10,fontWeight:active?"800":"600",color:active?C.primary:C.muted}}>{item.title}</Text>
+          </Pressable>;
+        })}
       </View>
     </>}
   </SafeAreaView>;
@@ -316,7 +377,7 @@ function BrowserPane({browser,onClose}:{browser:NonNullable<Browser>;onClose:()=
     <View style={{flexDirection:"row",alignItems:"center",paddingHorizontal:15,paddingVertical:12,gap:13,borderBottomWidth:1,borderColor:C.outline}}>
       <Pressable accessibilityRole="button" accessibilityLabel="Буцах" onPress={()=>{
         if(canGoBack)ref.current?.goBack();else onClose();
-      }}><Text style={{color:C.yellow,fontSize:26}}>‹</Text></Pressable>
+      }}><Text style={{color:C.primary,fontSize:26}}>‹</Text></Pressable>
       <View style={{flex:1}}><Text style={{fontSize:16,color:C.text,fontWeight:"800"}}>{browser.title}</Text>
         <Text style={S.caption} numberOfLines={1}>{browser.studio==="video"?"video.rainy.studio":"voice.rainy.studio"}</Text>
       </View>
@@ -339,7 +400,7 @@ function BrowserPane({browser,onClose}:{browser:NonNullable<Browser>;onClose:()=
         return false;
       }}
       onError={()=>setFailed(true)} onHttpError={event=>{if(event.nativeEvent.statusCode>=500)setFailed(true);}}
-      startInLoadingState renderLoading={()=><ActivityIndicator style={{flex:1}} size="large" color={C.yellow}/>}
+      startInLoadingState renderLoading={()=><ActivityIndicator style={{flex:1}} size="large" color={C.primary}/>}
       style={{flex:1,backgroundColor:C.bg}}/>}
     {busy&&!failed?<View style={{position:"absolute",right:14,top:60}}><ActivityIndicator size="small" color={C.yellow}/></View>:null}
   </View>;
