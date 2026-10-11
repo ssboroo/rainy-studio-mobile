@@ -355,47 +355,86 @@ export default function App() {
 
   function Projects(){
     return <>
-      <Eyebrow>МИНИЙ БҮТЭЭЛҮҮД</Eyebrow>
-      <Text style={S.h1}>Таны <Text style={{color:C.yellow}}>бүтээлийн</Text> сан.</Text>
-      <Gap n={11}/><Copy>Видео болон дууны үүсгэлтийн түүх тусдаа сервер дээр хадгалагддаг. Эндээс бүртгэлдээ нэвтэрч өөрийн ажлуудаа үзнэ.</Copy>
-      <Gap n={22}/>
+      <MiniPill title="YOUR LIBRARY"/>
+      <Gap n={14}/>
+      <Text style={[S.h1,{fontSize:34}]}>Бүтээл бүрээ{"\n"}<Text style={{color:C.primary}}>нэг дороос.</Text></Text>
+      <Gap n={10}/><Copy>Видео, зураг болон аудио бүтээлээ өөрийн студийн бүртгэлээр үзэх боломжтой.</Copy>
+      <Gap n={23}/>
+      <Pressable accessibilityRole="button" onPress={()=>openStudio("video",studioUrl("video","/studio"),"Видео бүтээлийн түүх")}
+        style={{backgroundColor:"#FFF3DE",borderWidth:1,borderColor:"#F8EBD2",borderRadius:23,padding:20,marginBottom:12}}>
+        <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+          <IconTile name="images-outline" bg=C.white color="#A67B26"/>
+          <Ionicons name="arrow-up-forward" size={21} color="#A67B26"/>
+        </View><Gap n={17}/>
+        <Text style={{fontSize:20,fontWeight:"900",color:C.heading}}>Video Projects</Text>
+        <Gap n={6}/><Copy>Видео, зураг, үүсгэлтийн түүх</Copy>
+        <Gap n={14}/><MiniPill title="Миний бүтээлүүд →" color="#A67B26" bg="#FFE9BD"/>
+      </Pressable>
+      <Pressable accessibilityRole="button" onPress={()=>openStudio("voice",studioUrl("voice","/"),"Дууны түүх")}
+        style={{backgroundColor:"#E6F7EF",borderWidth:1,borderColor:"#D7EEDF",borderRadius:23,padding:20}}>
+        <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+          <IconTile name="musical-notes-outline" bg=C.white color="#169A76"/>
+          <Ionicons name="arrow-up-forward" size={21} color="#169A76"/>
+        </View><Gap n={17}/>
+        <Text style={{fontSize:20,fontWeight:"900",color:C.heading}}>Voice Library</Text>
+        <Gap n={6}/><Copy>TTS, дуу, подкаст, дубляжийн түүх</Copy>
+        <Gap n={14}/><MiniPill title="Дууны түүх →" color="#168D70" bg="#CEF2E0"/>
+      </Pressable>
+      <Gap n={17}/>
       <Card>
-        <Text style={{color:C.yellow,fontSize:24}}>▷</Text><Gap n={8}/>
-        <Text style={S.h2}>Video Projects</Text><Copy>Кадрууд, зураг, үүсгэлтийн статус, бэлэн видеонууд.</Copy><Gap n={15}/>
-        <Button title="Видео бүтээлүүдээ үзэх ↗" onPress={()=>openStudio("video",studioUrl("video","/studio"),"Видео бүтээлийн түүх")}/>
+        <View style={{flexDirection:"row",gap:11}}>
+          <IconTile name="information-circle-outline" bg="#F2F4F8" color={C.muted}/>
+          <View style={{flex:1}}>
+            <Text style={{color:C.heading,fontWeight:"800",fontSize:12.5}}>Нэгдсэн сан хөгжүүлэлтэд</Text>
+            <Gap n={6}/><Copy muted>Одоогоор хоёр студийн данс болон кредит тусдаа. Нэгдсэн Projects сан, автоматаар видео+дуу нэгтгэх боломж нь дараагийн шат.</Copy>
+          </View>
+        </View>
       </Card>
-      <Gap n={12}/>
-      <Card><Text style={{color:C.green,fontSize:26}}>♫</Text><Gap n={8}/>
-        <Text style={S.h2}>Voice History</Text><Copy>Дуу, подкаст, TTS, дубляжийн үүсгэлт, татах боломж.</Copy><Gap n={15}/>
-        <Button title="Voice бүтээлүүдээ үзэх ↗" color={C.green} onPress={()=>openStudio("voice",studioUrl("voice","/"),"Дууны түүх")}/>
-      </Card>
-      <Gap n={14}/><Copy muted>Нэгдсэн төслийн сан, файлуудын автомат нийлүүлэлт болон нэг MP4 экспорт нь дараагийн хөгжүүлэлтийн ажил.</Copy>
     </>;
   }
 
   function Profile(){
     return <>
-      <Eyebrow>ДАНС БА ХОЛБОЛТ</Eyebrow>
-      <Text style={S.h1}>Нэг апп. <Text style={{color:C.yellow}}>Хоёр студи.</Text></Text>
-      <Gap n={11}/><Copy>Одоо Video болон Voice хоёр өөрийн нэвтрэх бүртгэлтэй. Аюулгүй нэгдсэн SSO баталгаажаагүй тул тэдгээрийн мэдээлэл, кредитийг нийлүүлсэн мэт харуулахгүй.</Copy>
-      <Gap n={22}/>
-      <Card><Text style={S.h2}>Video Studio</Text>
-        <ServiceIndicator label="RAVS сервер" ready={health.video}/>
-        <Gap n={13}/><Button title="RAVS бүртгэлээр нэвтрэх ↗" onPress={()=>openStudio("video",studioUrl("video","/login"),"Video нэвтрэх")}/>
+      <MiniPill title="YOUR ACCOUNT"/>
+      <Gap n={14}/>
+      <Text style={[S.h1,{fontSize:34}]}>Таны{"\n"}<Text style={{color:C.primary}}>RAINY орон зай.</Text></Text>
+      <Gap n={10}/><Copy>Хоёр студийг ашиглах, бүртгэлдээ нэвтрэх, MCP холболтоо удирдах.</Copy>
+      <Gap n={24}/>
+      <SectionTitle label="МИНИЙ СТУДИ" title="Бүртгэлүүд"/>
+      <Card>
+        <View style={{flexDirection:"row",gap:12,alignItems:"center"}}>
+          <IconTile name="videocam-outline" bg="#FFF1D6" color="#A67B26"/>
+          <View style={{flex:1}}><Text style={{fontSize:15,fontWeight:"800",color:C.heading}}>Video Studio</Text>
+            <Gap n={5}/><ServiceIndicator label="Видео сервер" ready={health.video}/></View>
+        </View>
+        <Gap n={16}/>
+        <Button title="Video дансаар нэвтрэх" secondary onPress={()=>openStudio("video",studioUrl("video","/login"),"Video нэвтрэх")}/>
       </Card>
       <Gap n={12}/>
-      <Card><Text style={S.h2}>Voice Studio</Text>
-        <ServiceIndicator label="Voice сервер" ready={health.voice}/>
-        <Gap n={13}/><Button title="Voice бүртгэлээр нэвтрэх ↗" color={C.green} onPress={()=>openStudio("voice",studioUrl("voice","/"),"Voice нэвтрэх")}/>
+      <Card>
+        <View style={{flexDirection:"row",gap:12,alignItems:"center"}}>
+          <IconTile name="mic-outline" bg="#E4F8EF" color="#179B79"/>
+          <View style={{flex:1}}><Text style={{fontSize:15,fontWeight:"800",color:C.heading}}>Voice Studio</Text>
+            <Gap n={5}/><ServiceIndicator label="Voice сервер" ready={health.voice}/></View>
+        </View>
+        <Gap n={16}/>
+        <Button title="Voice дансаар нэвтрэх" secondary onPress={()=>openStudio("voice",studioUrl("voice","/"),"Voice нэвтрэх")}/>
       </Card>
-      <Gap n={21}/>
-      <Eyebrow>CHATGPT / CLAUDE MCP</Eyebrow>
-      <Copy>ChatGPT/Claude дотор хоёр тусдаа MCP connector-ийг OAuth зөвшөөрлөөр нэмж, нэг ярианаас ажлын урсгалыг удирдах боломжтой. Энэ нь мобайл апп дотор шинэ chatbot үүсгэсэн гэсэн үг биш.</Copy>
-      <Gap n={14}/>
-      <Button title="Video MCP заавар ↗" secondary onPress={()=>openStudio("video",studioUrl("video","/integrations"),"Video MCP холболт")}/>
-      <Gap n={9}/>
-      <Button title="Voice MCP заавар ↗" secondary onPress={()=>openStudio("voice",studioUrl("voice","/integrations"),"Voice MCP холболт")}/>
-      <Gap n={22}/><Copy muted>© 2026 RAINY Studio. Higgsfield/ElevenLabs-ийн API ашиглалт нь албан ёсны түншийн статус биш.</Copy>
+      <Gap n={26}/>
+      <SectionTitle label="AUTOMATION" title="AI туслахтай холбох"/>
+      <Card>
+        <View style={{flexDirection:"row",gap:12,alignItems:"center"}}>
+          <IconTile name="git-network-outline" bg=C.softViolet color={C.primary}/>
+          <View style={{flex:1}}>
+            <Text style={{fontSize:14,fontWeight:"800",color:C.heading}}>ChatGPT + Claude MCP</Text>
+            <Gap n={4}/><Copy muted>AI туслахтай хоёр тусдаа OAuth холболт</Copy>
+          </View>
+        </View>
+        <Gap n={12}/><Copy>ChatGPT эсвэл Claude-аас Video ба Voice workflow-уудыг удирдахын тулд хоёр connector-ийг тус тусад нь зөвшөөрч холбоно.</Copy>
+        <Gap n={14}/><Button title="Video MCP заавар" secondary onPress={()=>openStudio("video",studioUrl("video","/integrations"),"Video MCP холболт")}/>
+        <Gap n={9}/><Button title="Voice MCP заавар" secondary onPress={()=>openStudio("voice",studioUrl("voice","/integrations"),"Voice MCP холболт")}/>
+      </Card>
+      <Gap n={19}/><Copy muted>© 2026 RAINY Studio. Хоёр студийн данс болон кредит тусдаа. API ашиглах нь албан ёсны түншийн эрх гэсэн үг биш.</Copy>
     </>;
   }
 
